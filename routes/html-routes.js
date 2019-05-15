@@ -3,6 +3,7 @@
 var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("../models");
+//var mongojs = require("mongojs");
 
 // Routes
 // =============================================================
@@ -35,13 +36,16 @@ module.exports = function (app) {
         db.Article.create(result)
           .then(function (dbArticle) {
             // View the added result in the console
+            //console.log(result)
           })
           .catch(function (err) {
             // If an error occurred, log it
             console.log(err);
           });
       });
-      //res.render('index', {});
+      
+    //res.send("Scrape Complete");
+      res.render('index', {});
     });
   });
 
@@ -73,5 +77,17 @@ module.exports = function (app) {
         // If an error occurred, send it to the client
         res.json(err);
       });
+  });
+
+  // GET route for retrieving a single atricle
+  app.get("/articles/:id", function (req, res) {
+    db.Article.find({
+      _id: req.params.id 
+    }).then(function(dbArticle){
+      res.render('single-thread', {articles: dbArticle});
+      console.log(dbArticle);
+    }).catch(function(err){
+      res.json(err);
+    });
   });
 };

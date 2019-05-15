@@ -1,4 +1,5 @@
-p.heading {
+p.heading,
+p.header {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 0;
@@ -8,10 +9,19 @@ p.summary {
     line-height: 16px;
     margin-bottom: 0px;
 }
+p.header {
+    text-align: center;
+}
 .link-icons {
     margin-bottom: 15px;
     padding-right: 20px;
 }
 .link-icons:hover {
     cursor: pointer;
+}
+.column {
+    padding-bottom: 0px;
+}
+.raised {
+    padding-top: 10px !important;
 }

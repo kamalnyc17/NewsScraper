@@ -12,13 +12,12 @@ $.getJSON("/articles", function(data) {
   }
 });
 
-// Whenever someone clicks a link to open
+// Whenever someone clicks a link to open the page
 $(document).on("click", "#url", function() {
   // Save the id from the p tag
   var thisURL = $(this).attr("data-url");
   window.open(thisURL, "_blank");
 });
-
 
 // deleting an article
 $(document).on("click", "#delete", function() {
@@ -36,3 +35,20 @@ $(document).on("click", "#delete", function() {
       location.reload();
     });
 });
+
+//opening an article
+$(document).on("click", "#open", function() {
+  // Save the id from the p tag
+  var thisID = $(this).attr("data-id");
+
+  // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/articles/" + thisID
+  })
+    // With that done, add the note information to the page
+    .then(function(data) {
+      //location.reload();
+    });
+
+})
