@@ -65,13 +65,21 @@ module.exports = function (app) {
 
   // Route for deleting an Articles from the db
   app.get("/delete/:id", function (req, res) {
+    var docId = req.params.id;
     // Grab every document in the Articles collection
     db.Article.deleteOne({
-        _id: req.params.id
+        _id: docId
       })
       .then(function (dbArticle) {
-        // If we were able to successfully find Articles, delete it
-        location.reload();
+        // If we were able to successfully find Articles, delete all it's comments
+        db.Comment.deleteMany({
+          threadid: docId
+        })
+        .then(function (dbComment) {
+          location.reload();
+        }).catch(function (err1){
+          res.json(err1)
+        })
       })
       .catch(function (err) {
         // If an error occurred, send it to the client
@@ -84,9 +92,53 @@ module.exports = function (app) {
     db.Article.find({
       _id: req.params.id 
     }).then(function(dbArticle){
-      res.render('single-thread', {articles: dbArticle});
-      console.log(dbArticle);
+        res.render('single-thread', {articles: dbArticle});
     }).catch(function(err){
+      res.json(err);
+    });
+  });
+
+  // post route for comments
+  app.post("/api/comment", function (req, res) {
+    db.Comment.create(req.body)
+      .then(function (dbArticle) {
+      // View the added result in the console
+        res.render('single-thread', {});
+      })
+      .catch(function (err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+  });
+
+  // Route for getting all comments for an article
+  app.get("/api/comment/:id", function (req, res) {
+    // Grab every document in the Articles collection
+    db.Comment.find({
+      threadid: req.params.id 
+    })
+      .then(function (dbComment) {
+        // If we were able to successfully find Articles, send them back to the client
+        res.json(dbComment);
+      })
+      .catch(function (err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
+  });
+
+  // Route for deleting one comment from the db
+  app.get("/delete-comment/:id", function (req, res) {
+    // Grab every document in the Articles collection
+    db.Comment.deleteOne({
+      _id: req.params.id
+    })
+    .then(function (dbComment) {
+      // If we were able to successfully find Articles, delete it
+      location.reload();
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
       res.json(err);
     });
   });

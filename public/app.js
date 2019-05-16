@@ -23,7 +23,6 @@ $(document).on("click", "#url", function() {
 $(document).on("click", "#delete", function() {
   // Save the id from the p tag
   var thisID = $(this).attr("data-id");
-  console.log( thisID );
   
   // Now make an ajax call for the Article
   $.ajax({
@@ -36,21 +35,68 @@ $(document).on("click", "#delete", function() {
     });
 });
 
-/*
-//opening an article
-$(document).on("click", "#open", function() {
+// saving a comment
+$("#create_comment").on("click", function () {
+  // Save an empty comment object
+  var comment = {};
+  comment.threadid  = $("#comment-id").text();
+  comment.name = $("[name=fname]").val();
+  comment.body = $("[name=comment]").val();
+  
+  $.post("/api/comment", comment, function () {
+    location.reload(true);
+  });
+});
+// // load old comments once the page is loaded
+$(document).ready(function() {
+  // Save an empty comment object
+  var comment = $("#comment-id").text();
+  // Grab the comments as a json
+  $.get("/api/comment/" + comment, function(data) {
+    // For each one
+    for (var i = 0; i < data.length; i++) {
+      // Display the apropos information on the page
+      $("#comments").append("<p class='name heading'>" + data[i].name + "</p>");
+      $("#comments").append("<p class='body summary'>" + data[i].body + "</p>");
+      $("#comments").append("<a class='link-icons' title = 'Delete Document' id='delete-comment' data-id='" + data[i]._id + "'>" + "<i class='trash icon'></i>" + "<a>");
+      $("#comments").append("<hr>")
+    }
+  });
+
+})
+
+// deleting a comment
+$(document).on("click", "#delete-comment", function() {
   // Save the id from the p tag
   var thisID = $(this).attr("data-id");
-
+  
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
-    url: "/articles/" + thisID
+    url: "/delete-comment/" + thisID
   })
     // With that done, add the note information to the page
-    .then(function(data) {      
-      console.log("AJAX ", data)
-      //location.reload();
+    .then(function(data) {
+      location.reload();
     });
-})
+});
+
+/* another option for loading old comments
+$("#old_comment").on("click", function () {
+  // Save an empty comment object
+  var comment = $("#comment-id").text();
+  // Grab the comments as a json
+  $.get("/api/comment/" + comment, function(data) {
+    // For each one
+    console.log(data)
+    for (var i = 0; i < data.length; i++) {
+      // Display the apropos information on the page
+      $("#comments").append("<p class='name heading'>" + data[i].name + "</p>");
+      $("#comments").append("<p class='body summary'>" + data[i].body + "</p>");
+      $("#comments").append("<a class='link-icons' title = 'Delete Document' id='delete-comment' data-id='" + data[i]._id + "'>" + "<i class='trash icon'></i>" + "<a>");
+      $("#comments").append("<hr>")
+    }
+  });
+});
+
 */

@@ -1,9 +1,44 @@
-<div class="container">
-  {{#with articles}}
-    <p>Title </p>
-    {{title}}
-    <p>Summary</p>
-    {{summary}}
-  {{/with}}
+<!-- body of the page -->
+<div class="ui raised very padded text container segment">
+  <p class="header">Mongo Scraper - NHL Edition</p>
+  <div class="ui segment">
+    <div class="ui two column very relaxed grid">
+      <div class="column">
+        <a href="/"><img class="ui mini circular image" src="../public/images/logo.png"></a> 
+      </div>
+      <div class="column">
+       <a href="/" type="button" class="ui positive button">Read Old Articles!</a>
+      </div>
+    </div>
+  </div>
+  <div>    
+    {{#each articles}}
+      <p class='heading'>{{title}}</p>    
+      <p class='summary'>{{summary}}</p>
+      <p class='heading'>Thread Id:</p>    
+      <p class='summary' id='comment-id'>{{_id}}</p>
+    {{/each}}
+    <!-- comments entry section -->
+    <br>
+    <div class="ui segment">
+      <form class="ui form">
+        <h5>Have something to say? Add a comment below!</h5> 
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" name="fname" id="your-name" placeholder="Name">
+        </div>         
+        <div class="field">
+          <label>Comments</label>
+          <textarea rows="3" name="comment" id="comment_body" placeholder="Write your comment..."></textarea>
+        </div>
+        <a class="ui primary button" id="create_comment"><i class="save icon"></i>Submit</a>
+        <!-- <a class="ui primary button" id="old_comment"><i class="upload icon"></i>Show Old Comments</a> -->
+      </form>
+    </div>    
+    <!-- old comments will show here -->    
+  </div>
+  <div id="comments">
+
+  </div>
 </div>
     
